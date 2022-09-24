@@ -17,56 +17,57 @@ numbers 배열 원소의 값은 0 이상 9 이하인 정수입니다.
 hand는 "left" 또는 "right" 입니다.
 "left"는 왼손잡이, "right"는 오른손잡이를 의미합니다.
 왼손 엄지손가락을 사용한 경우는 L, 오른손 엄지손가락을 사용한 경우는 R을 순서대로 이어붙여 문자열 형태로 return 해주세요.
-```
+```;
 
 function solution(numbers, hand) {
-    let leftNum = 10;
-    let rightNum = 12;
-      
-    return numbers
-      .map((num) => {
-        if (num === 0) {
-          num = 11;
-        }
-        if (num % 3 === 1) {
+  let leftNum = 10;
+  let rightNum = 12;
+
+  return numbers
+    .map((num) => {
+      if (num === 0) {
+        num = 11;
+      }
+      if (num % 3 === 1) {
+        return leftTo(num);
+      } else if (num % 3 === 0) {
+        return rightTo(num);
+      } else {
+        const numLocation = numToLocation(num);
+        const leftDistance = distanceBtwLocation(
+          numToLocation(leftNum),
+          numLocation
+        );
+        const rightDistance = distanceBtwLocation(
+          numToLocation(rightNum),
+          numLocation
+        );
+        if (leftDistance === rightDistance) {
+          return hand === "left" ? leftTo(num) : rightTo(num);
+        } else if (leftDistance < rightDistance) {
           return leftTo(num);
-        } else if (num % 3 === 0) {
-          return rightTo(num);
         } else {
-          const numLocation = numToLocation(num);
-          const leftDistance = distanceBtwLocation(
-            numToLocation(leftNum),
-            numLocation
-          );
-          const rightDistance = distanceBtwLocation(
-            numToLocation(rightNum),
-            numLocation
-          );
-          if (leftDistance === rightDistance) {
-            return hand === "left" ? leftTo(num) : rightTo(num);
-          } else if (leftDistance < rightDistance) {
-            return leftTo(num);
-          } else {
-            return rightTo(num);
-          }
+          return rightTo(num);
         }
-      })
-      .join("");
-  
-    function leftTo(num) {
-      leftNum = num;
-      return "L";
-    }
-  
-    function rightTo(num) {
-      rightNum = num;
-      return "R";
-    }
+      }
+    })
+    .join("");
+
+  function leftTo(num) {
+    leftNum = num;
+    return "L";
   }
-  
-  function numToLocation(num) {
-    return [Math.floor((num - 1) / 3), (num - 1) % 3];
+
+  function rightTo(num) {
+    rightNum = num;
+    return "R";
   }
-  
-  function distanceBtwLocation(a, b) {
-    return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+}
+
+function numToLocation(num) {
+  return [Math.floor((num - 1) / 3), (num - 1) % 3];
+}
+
+function distanceBtwLocation(a, b) {
+  return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+}
